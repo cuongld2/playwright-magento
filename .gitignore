@@ -1,0 +1,20 @@
+.vscode
+.idea
+
+# npm
+node_modules
+npm-debug.log
+
+# yarn
+.pnp.*
+.yarn
+
+# tests
+test-results
+playwright-report
+cucumber-report
+**/.features-gen/**/*.spec.js
+
+.nx
+
+build-archive.log
