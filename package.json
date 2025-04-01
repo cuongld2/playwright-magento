@@ -2,7 +2,7 @@
   "name": "playwright-bdd-example",
   "version": "0.1.0",
   "scripts": {
-    "test": "npx bddgen && npx playwright test --headed",
+    "test": "npx bddgen && npx playwright test",
     "report": "npx http-server ./cucumber-report -c-1 -a localhost -o index.html",
     "watch:bdd": "nodemon -w ./features -e feature,js,ts --exec \"npx bddgen\"",
     "watch:pw": "playwright test --ui",
