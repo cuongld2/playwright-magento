@@ -43,7 +43,7 @@ Then('Verify order summary', async ({ page }) => {
   const jackets: Item[] = JSON.parse(JSON.stringify(jacketsJson));
   const pants: Item[] = JSON.parse(JSON.stringify(pantsJson));
   jackets.push(...pants);
-  shippingPage.verifyOrderSummary(jackets);
+  await shippingPage.verifyOrderSummary(jackets);
 });
 
 When('Place the order', async ({ page }) => {

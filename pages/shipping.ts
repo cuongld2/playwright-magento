@@ -24,7 +24,7 @@ export class ShippingPage {
   constructor(page: Page) {
     this.page = page;
     this.menMenu = page.locator('span', { hasText: 'Men' });
-    this.totalOrderedItems = page.locator('span["data-bind"="text: getCartSummaryItemsCount()"]');
+    this.totalOrderedItems = page.locator('span[data-bind="text: getCartSummaryItemsCount()"]');
     this.itemsList = page.locator('div.block items-in-cart');
     this.productItems = page.locator('div.product-item-inner');
     this.nextButton = page.locator('button[data-role="opc-continue"]');
@@ -34,31 +34,36 @@ export class ShippingPage {
   }
 
   async verifyOrderSummary(items: Item[]) {
-    await this.menMenu.hover();
-    var expectedTotalItems = items.length;
-    expect(this.totalOrderedItems).toHaveText(expectedTotalItems.toString());
-    this.expandItemsList();
+
+    var expectedTotalItems = 0;
+    for (const item of items) {
+      expectedTotalItems += item["quantity"];
+    }
+    await expect(this.totalOrderedItems).toHaveText(expectedTotalItems.toString());
+    await this.expandItemsList();
+    var totalDifferentItems = items.length;
     const allProductItems = await this.productItems.all();
     var matchedItems = 0;
     for (const item of items) {
       for (const productItem of allProductItems) {
-        const productItemName = await productItem.locator('strong.product-item-name').textContent();
-        if(productItemName === item["name"]) {
+        const productItemName = (await productItem.locator('strong.product-item-name').textContent())?.trim();
+        if (productItemName === item["name"]) {
           const productItemPrice = (await productItem.locator('span.price').textContent())?.replace("$", "");
-          const productItemQuantity = await productItem.locator('div.details-qty').textContent();
-          expect(productItemPrice).toEqual((item["price"]*item["quantity"]).toString());
+          const productItemQuantity = await productItem.locator('div.details-qty').locator('span.value').textContent();
+          expect(productItemPrice).toEqual(((item["price"]*item["quantity"]).toFixed(2)).toString());
           expect(productItemQuantity).toEqual(item["quantity"].toString());
           matchedItems++;
         }
       }
     }
-    expect(matchedItems).toEqual(expectedTotalItems);
+    expect(matchedItems).toEqual(totalDifferentItems);
   }
 
   async expandItemsList() {
-    this.itemsList.locator('div.title').getAttribute('aria-expanded').then(async (value) => {
+    await this.page.locator('div.title').getAttribute('aria-expanded').then(async (value) => {
       if (value === 'false') {
-        await this.itemsList.click();
+        await this.page.locator('div.title').click();
+        await expect(this.page.locator('div.title')).toHaveAttribute('aria-expanded', 'true');
       }
   })
 }

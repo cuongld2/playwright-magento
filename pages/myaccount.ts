@@ -10,7 +10,7 @@ export class MyAccountPage {
   }
 
   async verifyOrderNumber(orderNumber: string) {
-    const orderNumberText = await this.orderNumber.textContent();
+    const orderNumberText = await this.orderNumber.first().textContent();
     expect(orderNumberText).toEqual(orderNumber);
   }
 

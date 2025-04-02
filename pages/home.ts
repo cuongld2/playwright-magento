@@ -18,7 +18,7 @@ export class HomePage {
     this.menMenu = page.locator('span', { hasText: 'Men' });
     this.topsMenu = page.locator('span', { hasText: 'Tops' });
     this.jacketsMenu = page.locator('span', { hasText: 'Jackets' });
-    this.actionSwitchButton = page.locator('button.action switch');
+    this.actionSwitchButton = page.locator('button[class="action switch"]').locator('visible=true');
     this.myAccountButton = page.locator('a', { hasText: 'My Account' });
     this.myAccountHeader = page.locator('span', { hasText: 'My Account' });
   }

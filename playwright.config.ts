@@ -8,6 +8,7 @@ const testDir = defineBddConfig({
 
 export default defineConfig({
   testDir,
+  timeout: 120_000,
   reporter: [
     cucumberReporter('html', {
       outputFile: 'cucumber-report/index.html',

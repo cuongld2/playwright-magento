@@ -22,13 +22,13 @@ export class ShopPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.menMenu = page.getByRole('link', { name: 'Men', exact: true });
+    this.menMenu = page.locator('div[id="store.menu"] > nav > ul > li').locator(':text-is("Men")').locator('visible=true');
     this.topsMenu = page.locator('span', { hasText: 'Tops',  }).locator('visible=true');
     this.jacketsMenu = page.locator('span', { hasText: 'Jackets' }).locator('visible=true');
     this.bottomsMenu = page.locator('span', { hasText: 'Bottoms' }).locator('visible=true');
-    this.pantsMenu = page.locator('link', { hasText: 'Pants' }).locator('visible=true');
+    this.pantsMenu = page.locator('span', { hasText: 'Pants' }).locator('visible=true');
     this.addToCartButton = page.locator('button', { hasText: 'Add to Cart' }).locator('visible=true');
-    this.cartIcon = page.locator('a.action showcart');
+    this.cartIcon = page.locator('a[class="action showcart"]').locator('visible=true');
     this.proceedToCheckoutButton = page.locator('button', { hasText: 'Proceed to Checkout' });
   }
 
@@ -48,6 +48,9 @@ export class ShopPage {
                 await itemHolder.locator('div[data-rendered=true]').locator('div[class="swatch-attribute color"]').locator(`div[aria-label="${item["color"]}"]`).click();
             }
             await itemHolder.locator(this.addToCartButton).first().click();
+            var confirmationAddedCart: Locator;
+            confirmationAddedCart = this.page.locator('div[role="alert"]', { hasText: 'You added ' + item["name"] });
+            await confirmationAddedCart.waitFor({ state: 'visible' });
         }
     }
   }
